@@ -322,21 +322,23 @@ export default function Dashboard() {
               onClick={(e) => e.stopPropagation()}
               style={{ textAlign: 'center', maxWidth: '340px', padding: '32px 24px' }}
             >
-              <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '4px', color: 'var(--text-primary)' }}>
-                29.04
-              </h2>
-              <div style={{ fontSize: '1.8rem', marginBottom: '24px' }}>❤️</div>
-              <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+              <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginTop: '10px' }}>
                 This app is completely developed indie by me,<br />
-                <strong style={{ color: 'var(--text-primary)', fontSize: '1.2rem', display: 'block', marginTop: '12px' }}>Pratyush</strong>
+                <strong style={{ color: 'var(--text-primary)', fontSize: '1.5rem', display: 'block', marginTop: '12px' }}>Pratyush</strong>
               </p>
+
               <button 
                 className="btn btn-primary" 
-                style={{ marginTop: '32px', width: '100%' }}
+                style={{ marginTop: '32px', marginBottom: '28px', width: '100%' }}
                 onClick={() => setShowAbout(false)}
               >
                 Close
               </button>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.6 }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '2px' }}>29.04</span>
+                <span style={{ fontSize: '0.9rem', marginTop: '4px' }}>❤️</span>
+              </div>
             </motion.div>
           </motion.div>
         )}
