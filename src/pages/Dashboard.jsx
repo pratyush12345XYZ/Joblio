@@ -16,6 +16,7 @@ import BottomNav from '../components/BottomNav';
 import StatusPage from './StatusPage';
 import ProgressPage from './ProgressPage';
 
+export default function Dashboard() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(true);
