@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Download, LogOut } from 'lucide-react';
+import { Plus, Download, LogOut, Settings, Info, Moon, Sun } from 'lucide-react';
 import { STORAGE_KEYS } from '../utils/constants';
 import { exportToCSV } from '../utils/helpers';
 import { useApplications } from '../hooks/useApplications';
 import { useTheme } from '../hooks/useTheme';
-import ThemeToggle from '../components/ThemeToggle';
 import StatsBar from '../components/StatsBar';
 import SearchFilter from '../components/SearchFilter';
 import ApplicationCard from '../components/ApplicationCard';
@@ -17,11 +16,12 @@ import BottomNav from '../components/BottomNav';
 import StatusPage from './StatusPage';
 import ProgressPage from './ProgressPage';
 
-export default function Dashboard() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [activePage, setActivePage] = useState('dashboard');
   const [editingApp, setEditingApp] = useState(null);
   const { theme, toggleTheme } = useTheme();
@@ -141,17 +141,54 @@ export default function Dashboard() {
                     <span className="btn-text-desktop">Export</span>
                   </motion.button>
                 )}
-                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-                <motion.button
-                  className="btn btn-ghost btn-icon"
-                  onClick={handleLogout}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  title="Logout"
-                  id="logout-btn"
-                >
-                  <LogOut size={18} />
-                </motion.button>
+                
+                <div style={{ position: 'relative' }}>
+                  <motion.button
+                    className="btn btn-ghost btn-icon"
+                    onClick={() => setShowSettings(!showSettings)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title="Settings"
+                  >
+                    <Settings size={18} />
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {showSettings && (
+                      <motion.div
+                        className="status-dropdown-menu glass-card"
+                        style={{ right: 0, left: 'auto', width: '200px', padding: '8px', zIndex: 100 }}
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <button 
+                          className="status-dropdown-item" 
+                          onClick={() => { toggleTheme(); setShowSettings(false); }}
+                        >
+                          {theme === 'dark' ? <Sun size={14} style={{ marginRight: '8px' }}/> : <Moon size={14} style={{ marginRight: '8px' }}/>}
+                          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                        </button>
+                        <button 
+                          className="status-dropdown-item" 
+                          onClick={() => { setShowAbout(true); setShowSettings(false); }}
+                        >
+                          <Info size={14} style={{ marginRight: '8px' }} />
+                          <span>About Us</span>
+                        </button>
+                        <button 
+                          className="status-dropdown-item" 
+                          onClick={handleLogout}
+                          style={{ color: '#ef4444' }}
+                        >
+                          <LogOut size={14} style={{ marginRight: '8px' }} />
+                          <span>Logout</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.header>
 
@@ -265,6 +302,44 @@ export default function Dashboard() {
         onSubmit={handleSubmit}
         editData={editingApp}
       />
+
+      <AnimatePresence>
+        {showAbout && (
+          <motion.div
+            className="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowAbout(false)}
+            style={{ zIndex: 999 }}
+          >
+            <motion.div
+              className="modal glass-card"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ textAlign: 'center', maxWidth: '340px', padding: '32px 24px' }}
+            >
+              <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '4px', color: 'var(--text-primary)' }}>
+                29.04
+              </h2>
+              <div style={{ fontSize: '1.8rem', marginBottom: '24px' }}>❤️</div>
+              <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                This app is completely developed indie by me,<br />
+                <strong style={{ color: 'var(--text-primary)', fontSize: '1.2rem', display: 'block', marginTop: '12px' }}>Pratyush</strong>
+              </p>
+              <button 
+                className="btn btn-primary" 
+                style={{ marginTop: '32px', width: '100%' }}
+                onClick={() => setShowAbout(false)}
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
