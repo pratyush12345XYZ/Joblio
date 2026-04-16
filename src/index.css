@@ -1236,3 +1236,5 @@ textarea.input {
   font-weight: 700;
   color: var(--text-primary);
 }
+
+/* Cache-bust CSS for Render deployment to fix 404 cache */
