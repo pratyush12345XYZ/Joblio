@@ -182,6 +182,7 @@ function StatusDropdown({ app, onUpdateStatus }) {
 
 export default function StatusPage({ applications, stats, onUpdateStatus, onUpdateApp }) {
   const [popup, setPopup] = useState(null);
+  const [isRejectionArchiveOpen, setIsRejectionArchiveOpen] = useState(false);
 
   const selectedApps = applications.filter(a => a.status === 'Selected');
   const rejectedApps = applications.filter(a => a.status === 'Rejected');
@@ -279,16 +280,45 @@ export default function StatusPage({ applications, stats, onUpdateStatus, onUpda
 
           {rejectedApps.length > 0 && (
             <div className="status-section">
-              <h3 className="status-section-title">Rejection Archive</h3>
-              <div className="rejection-list">
-                {rejectedApps.map(app => (
-                  <RejectionCard
-                    key={app.id}
-                    app={app}
-                    onUpdateApp={onUpdateApp}
-                  />
-                ))}
+              <div 
+                className="status-section-header" 
+                onClick={() => setIsRejectionArchiveOpen(!isRejectionArchiveOpen)}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  cursor: 'pointer',
+                  padding: '12px 16px',
+                  background: 'var(--bg-glass)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-subtle)',
+                  marginBottom: isRejectionArchiveOpen ? '16px' : '0'
+                }}
+              >
+                <h3 className="status-section-title" style={{ marginBottom: 0 }}>Rejection Archive</h3>
+                <ChevronDown size={18} style={{ transform: isRejectionArchiveOpen ? 'rotate(180deg)' : 'none', transition: '0.3s' }} />
               </div>
+              
+              <AnimatePresence>
+                {isRejectionArchiveOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="rejection-list">
+                      {rejectedApps.map(app => (
+                        <RejectionCard
+                          key={app.id}
+                          app={app}
+                          onUpdateApp={onUpdateApp}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>

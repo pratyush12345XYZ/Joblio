@@ -267,69 +267,151 @@
   color: var(--text-muted);
 }
 
-.filter-row {
+.filter-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-.filter-row-left {
-  display: flex;
+.btn-filter-toggle {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  padding: 8px 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.filter-icon {
-  color: var(--text-muted);
-  flex-shrink: 0;
+.btn-filter-toggle:hover {
+  background: var(--bg-glass-strong);
+  border-color: var(--border-strong);
+}
+
+.btn-filter-toggle.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.active-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.filter-panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-panel-content {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.filter-action {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
 }
 
 .filter-select {
-  padding: 6px 28px 6px 10px;
+  padding: 8px 28px 8px 12px;
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-family: var(--font-family);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
   transition: all var(--transition-fast);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 8px center;
+  background-position: right 10px center;
+  height: 38px;
 }
 
 .filter-select:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
 .sort-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--text-muted);
 }
 
 .btn-clear-filters {
-  padding: 4px 12px;
-  font-size: 0.78rem;
+  padding: 8px 16px;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent);
   background: var(--accent-soft);
   border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-family: var(--font-family);
   transition: all var(--transition-fast);
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-clear-filters:hover {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.3);
+}
+
+@media (max-width: 600px) {
+  .filter-panel-content {
+    grid-template-columns: 1fr 1fr;
+    padding: 16px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .filter-panel-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===== CARDS GRID ===== */
@@ -946,13 +1028,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
   animation: progress-shimmer 2s infinite;
 }
 
 @keyframes progress-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .progress-bar-percent {

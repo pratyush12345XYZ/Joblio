@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { APP_TYPES, STATUSES, PRIORITIES, LOCATIONS } from '../utils/constants';
 
@@ -10,6 +11,8 @@ export default function SearchFilter({
   filterLocation, setFilterLocation,
   sortBy, setSortBy,
 }) {
+  const [showFilters, setShowFilters] = useState(false);
+  
   const hasActiveFilters =
     filterType !== 'All' ||
     filterStatus !== 'All' ||
@@ -43,70 +46,15 @@ export default function SearchFilter({
         />
       </div>
 
-      <div className="filter-row">
-        <div className="filter-row-left">
-          <SlidersHorizontal size={15} className="filter-icon" />
-
-          <select
-            className="filter-select"
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            id="filter-type"
-          >
-            <option value="All">All Types</option>
-            {APP_TYPES.map(t => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-
-          <select
-            className="filter-select"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            id="filter-status"
-          >
-            <option value="All">All Status</option>
-            {STATUSES.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-
-          <select
-            className="filter-select"
-            value={filterPriority}
-            onChange={(e) => setFilterPriority(e.target.value)}
-            id="filter-priority"
-          >
-            <option value="All">All Priority</option>
-            {PRIORITIES.map(p => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-
-          <select
-            className="filter-select"
-            value={filterLocation}
-            onChange={(e) => setFilterLocation(e.target.value)}
-            id="filter-location"
-          >
-            <option value="All">All Locations</option>
-            {LOCATIONS.map(l => (
-              <option key={l} value={l}>{l}</option>
-            ))}
-          </select>
-
-          {hasActiveFilters && (
-            <motion.button
-              className="btn-clear-filters"
-              onClick={clearFilters}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Clear
-            </motion.button>
-          )}
-        </div>
+      <div className="filter-toolbar">
+        <button
+          className={`btn-filter-toggle ${showFilters || hasActiveFilters ? 'active' : ''}`}
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <SlidersHorizontal size={14} />
+          <span>Filter</span>
+          {hasActiveFilters && <span className="active-dot"></span>}
+        </button>
 
         <div className="sort-group">
           <ArrowUpDown size={14} />
@@ -123,6 +71,94 @@ export default function SearchFilter({
           </select>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+            animate={{ opacity: 1, height: 'auto', marginBottom: 20 }}
+            exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div className="filter-panel glass">
+              <div className="filter-panel-content">
+                <div className="filter-item">
+                  <label className="filter-label">Type</label>
+                  <select
+                    className="filter-select full-width"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    id="filter-type"
+                  >
+                    <option value="All">All Types</option>
+                    {APP_TYPES.map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-item">
+                  <label className="filter-label">Status</label>
+                  <select
+                    className="filter-select full-width"
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    id="filter-status"
+                  >
+                    <option value="All">All Status</option>
+                    {STATUSES.map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-item">
+                  <label className="filter-label">Priority</label>
+                  <select
+                    className="filter-select full-width"
+                    value={filterPriority}
+                    onChange={(e) => setFilterPriority(e.target.value)}
+                    id="filter-priority"
+                  >
+                    <option value="All">All Priority</option>
+                    {PRIORITIES.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-item">
+                  <label className="filter-label">Location</label>
+                  <select
+                    className="filter-select full-width"
+                    value={filterLocation}
+                    onChange={(e) => setFilterLocation(e.target.value)}
+                    id="filter-location"
+                  >
+                    <option value="All">All Locations</option>
+                    {LOCATIONS.map(l => (
+                      <option key={l} value={l}>{l}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {hasActiveFilters && (
+                  <div className="filter-item filter-action">
+                    <motion.button
+                      className="btn-clear-filters full-width"
+                      onClick={clearFilters}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Clear Filters
+                    </motion.button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
