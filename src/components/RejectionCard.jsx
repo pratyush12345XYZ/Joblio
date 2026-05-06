@@ -97,7 +97,7 @@ export default function RejectionCard({ app, onUpdateApp }) {
                       <Calendar size={12} /> Applied On
                     </span>
                     <span style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-                      {app.date ? formatDate(app.date) : 'N/A'}
+                      {app.applyDate ? formatDate(app.applyDate) : 'N/A'}
                     </span>
                   </div>
                   
